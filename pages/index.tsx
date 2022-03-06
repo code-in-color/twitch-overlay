@@ -2,7 +2,7 @@ import type { NextPage } from "next"
 import Head from "next/head"
 import { useEffect, useState } from "react"
 import TmiClient from "../common/tmi"
-import styles from "../styles/Home.module.css"
+import styles from "../styles/Chat.module.css"
 
 interface Message {
   readonly id?: string
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
 
       <ul>
         {messages.map(m => (
-          <li key={m.id}>{`${m.user} said ${m.message}`}</li>
+          <li className={styles.message}  key={m.id}><span>{`${m.user}:`}</span>{` ${m.message}`}</li>
         ))}
       </ul>
     </div>
