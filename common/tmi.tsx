@@ -5,19 +5,17 @@ import {
   _TwitchUsername_,
 } from "./constant"
 
-export default function useTmiClient() {
-  const client = tmiClient({
-    options: { debug: true, messagesLogLevel: "info" },
-    connection: {
-      reconnect: true,
-      secure: true,
-    },
-    identity: {
-      username: _TwitchUsername_,
-      password: _TwitchPassword_,
-    },
-    channels: _TwitchChannels_,
-  })
+const client = tmiClient({
+  options: { debug: true, messagesLogLevel: "info" },
+  connection: {
+    reconnect: true,
+    secure: true,
+  },
+  identity: {
+    username: _TwitchUsername_,
+    password: _TwitchPassword_,
+  },
+  channels: _TwitchChannels_,
+})
 
-  return [client]
-}
+export default client
