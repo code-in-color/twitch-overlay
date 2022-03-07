@@ -3,7 +3,6 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import TmiClient from '../common/tmi'
 import styles from '../styles/Chat.module.css'
-import { CSSTransition } from 'react-transition-group'
 
 interface Message {
   readonly id?: string
