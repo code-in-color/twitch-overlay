@@ -1,22 +1,34 @@
 import type { NextPage } from "next"
 import Head from "next/head"
-import { useEffect } from "react"
-import useTmiClient from "../common/tmi"
+import { useEffect, useState } from "react"
+import TmiClient from "../common/tmi"
 import styles from "../styles/Home.module.css"
 
+interface Message {
+  readonly id?: string
+  readonly user?: string
+  readonly message: string
+}
+
 const Home: NextPage = () => {
-  const [tmi] = useTmiClient()
+  const [messages, setMessages] = useState<Message[]>([])
+  const [client, setClient] = useState<string | null>(null)
 
   useEffect(() => {
     const initTmi = async () => {
       try {
-        const [s, n] = await tmi.connect()
+        if (!client) {
+          const [connection] = await TmiClient.connect()
+          setClient(connection)
+        }
 
-        tmi.on("message", (channel, tags, message, self) => {
+        TmiClient.on("message", (channel, tags, message, self) => {
           if (self) return
-          if (message.toLowerCase() === "!hello") {
-            tmi.say(channel, `@${tags.username}, heya!`)
-          }
+
+          setMessages([
+            { message, id: tags.id, user: tags["display-name"] },
+            ...messages,
+          ])
         })
       } catch (err) {
         console.error(err)
@@ -24,7 +36,7 @@ const Home: NextPage = () => {
     }
 
     initTmi()
-  }, [tmi])
+  }, [messages, client])
 
   return (
     <div className={styles.container}>
@@ -32,6 +44,12 @@ const Home: NextPage = () => {
         <title>Code in Color</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <ul>
+        {messages.map(m => (
+          <li key={m.id}>{`${m.user} said ${m.message}`}</li>
+        ))}
+      </ul>
     </div>
   )
 }
