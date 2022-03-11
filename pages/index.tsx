@@ -1,8 +1,8 @@
-import type { NextPage } from "next"
-import Head from "next/head"
-import { useEffect, useState } from "react"
-import TmiClient from "../common/tmi"
-import styles from "../styles/Home.module.css"
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import { useEffect, useState } from 'react'
+import TmiClient from '../common/tmi'
+import styles from '../styles/Chat.module.css'
 
 interface Message {
   readonly id?: string
@@ -22,11 +22,11 @@ const Home: NextPage = () => {
           setClient(connection)
         }
 
-        TmiClient.on("message", (channel, tags, message, self) => {
+        TmiClient.on('message', (channel, tags, message, self) => {
           if (self) return
 
           setMessages([
-            { message, id: tags.id, user: tags["display-name"] },
+            { message, id: tags.id, user: tags['display-name'] },
             ...messages,
           ])
         })
@@ -42,12 +42,15 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <Head>
         <title>Code in Color</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
 
       <ul>
-        {messages.map(m => (
-          <li key={m.id}>{`${m.user} said ${m.message}`}</li>
+        {messages.map((m) => (
+          <li className={styles.message} key={m.id}>
+            <span>{`${m.user}:`}</span>
+            {` ${m.message}`}
+          </li>
         ))}
       </ul>
     </div>
